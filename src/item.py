@@ -1,5 +1,4 @@
 import csv
-import sys
 
 class Item:
     """
@@ -13,7 +12,7 @@ class Item:
         self.__name = name
         self.price = price
         self.quantity = quantity
-        #self.all.append(self) #Для homework-2 этa команда перенесена в функцию instantiate_from_csv
+        self.all.append(self)
 
     def calculate_total_price(self) -> float:
         """Рассчитывает общую стоимость конкретного товара в магазине."""
@@ -25,11 +24,12 @@ class Item:
 
     @classmethod
     def instantiate_from_csv(cls, path):
+        Item.all.clear()
         with open(path, 'r',
                   encoding='cp1251') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                Item.all.append(Item(row['name'], int(row['price']), int(row['quantity'])))
+                Item(row['name'], float(row['price']), int(row['quantity']))
 
     @staticmethod
     def string_to_number(string):

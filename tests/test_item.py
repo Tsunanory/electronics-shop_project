@@ -1,11 +1,21 @@
 import pytest
-import os
+import csv
 from src.item import Item
 
 
 @pytest.fixture
 def test_obj():
     return Item('name', 100, 30)
+
+
+@pytest.fixture
+def csv_data():
+    rows = []
+    with open('src/items.csv', 'r', encoding='cp1251') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            rows.append([row['name'], int(row['price']), int(row['quantity'])])
+        return rows
 
 
 def test_calculate_total_price(test_obj):
@@ -31,3 +41,15 @@ def test_name(test_obj):
     old_name = test_obj.name
     test_obj.name = 'new_name'
     assert old_name != 'new_name'
+
+def test_instantiate_from_csv(csv_data):
+    objects = []
+    q = [csv_data[0][2], csv_data[1][2], csv_data[2][2], csv_data[3][2], csv_data[4][2]]
+    for row in csv_data:
+        objects.append(Item(row[0], row[1], row[2]))
+        f = 0
+    for obj in objects:
+        assert obj.quantity == q[f]
+        f += 1
+
+
