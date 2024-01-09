@@ -52,4 +52,8 @@ def test_instantiate_from_csv(csv_data):
         assert obj.quantity == q[f]
         f += 1
 
+def test_repr(test_obj):
+    assert repr(test_obj) == "Item('name', 100, 30)"
 
+def test_str(test_obj):
+    assert str(test_obj) == 'name'
