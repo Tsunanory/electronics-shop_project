@@ -20,8 +20,8 @@ class Item:
     def __str__(self):
         return self.name
 
-    def __add__(self, other):
-        if isinstance(other, (self.__class__, Item.__class__)):
+    def __add__(self, other) -> int:
+        if isinstance(other, Item) or issubclass(other.__class__, Item):
             return self.quantity + other.quantity
 
     def calculate_total_price(self) -> float:
