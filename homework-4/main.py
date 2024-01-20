@@ -22,7 +22,7 @@ if __name__ == '__main__':
     assert phone1 + phone1 == 10
 
     apple1 = Apple(11)
-    print(apple1 + item1) # 31
+    print(item1 + apple1) # 31
     print(apple1 + phone1) # 16
 
     phone1.number_of_sim = 0
