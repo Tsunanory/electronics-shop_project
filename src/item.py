@@ -2,7 +2,7 @@ import csv
 
 class InstantiateCSVError(Exception):
     def __init__(self, message):
-        print(message)
+        self.message = message
 
 class Item:
     """
@@ -47,10 +47,14 @@ class Item:
                 for row in reader:
                     Item(row['name'], float(row['price']), int(row['quantity']))
                     cnt += 1
+            try:
+                if cnt != 5:
+                    raise InstantiateCSVError('InstantiateCSVError: Файл поврежден')
+            except InstantiateCSVError as ex:
+                print(ex.message)
         except FileNotFoundError:
             print('FileNotFoundError: Отсутствует файл item.csv')
-        if cnt != 5:
-           raise InstantiateCSVError('Файл поврежден')
+
 
 
     @staticmethod
