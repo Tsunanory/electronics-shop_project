@@ -1,6 +1,6 @@
 import pytest
 import csv
-from src.item import Item
+from src.item import Item, InstantiateCSVError
 
 
 @pytest.fixture
@@ -59,3 +59,11 @@ def test_str(test_item):
 
 def test_add(test_item):
     assert test_item + test_item == 60
+
+def test_file_is_absent(test_item):
+    with pytest.raises(FileNotFoundError):
+        file = test_item.instantiate_from_csv('some_path')
+    for row in file:
+        if not row['name'] or not float(row['price']) or not int(row['quantity']):
+            raise FileNotFoundError
+
