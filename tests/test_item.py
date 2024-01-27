@@ -1,5 +1,9 @@
+import os
+
 import pytest
 import csv
+
+from config import ROOT_DIR
 from src.item import Item, InstantiateCSVError
 
 
@@ -10,7 +14,8 @@ def test_item():
 @pytest.fixture
 def csv_data():
     rows = []
-    with open('src/items.csv', 'r', encoding='cp1251') as file:
+    test_file_path = os.path.join(ROOT_DIR, 'src', 'items.csv')
+    with open(test_file_path, 'r', encoding='cp1251') as file:
         reader = csv.DictReader(file)
         for row in reader:
             rows.append([row['name'], int(row['price']), int(row['quantity'])])
@@ -39,15 +44,18 @@ def test_name(test_item):
     test_item.name = 'new_name'
     assert old_name != 'new_name'
 
-# def test_instantiate_from_csv(csv_data):
-#     objects = []
-#     q = [csv_data[0][2], csv_data[1][2], csv_data[2][2], csv_data[3][2], csv_data[4][2]]
-#     for row in csv_data:
-#         objects.append(Item(row[0], row[1], row[2]))
-#     f = 0
-#     for obj in objects:
-#         assert obj.quantity == q[f]
-#         f += 1
+def test_instantiate_from_csv():
+    test_file_path = os.path.join(ROOT_DIR, 'src', 'items.csv')
+    Item.instantiate_from_csv(test_file_path)
+    assert len(Item.all) == 4
+    # objects = []
+    # q = [csv_data[0][2], csv_data[1][2], csv_data[2][2], csv_data[3][2], csv_data[4][2]]
+    # for row in csv_data:
+    #     objects.append(Item(row[0], row[1], row[2]))
+    # f = 0
+    # for obj in objects:
+    #     assert obj.quantity == q[f]
+    #     f += 1
 
 def test_repr(test_item):
     assert repr(test_item) == "Item('name', 100, 30)"
@@ -64,5 +72,6 @@ def test_file_is_absent(test_item):
 
 
 def test_instantianion_error(test_item):
+    test_file_path = os.path.join(ROOT_DIR, 'tests', 'test_file_for_instantiate_broken.csv')
     with pytest.raises(InstantiateCSVError):
-        test_instantiate_from_csv('src/items.csv')
+        Item.instantiate_from_csv(test_file_path)

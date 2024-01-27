@@ -47,13 +47,11 @@ class Item:
                 for row in reader:
                     Item(row['name'], float(row['price']), int(row['quantity']))
                     cnt += 1
-            try:
-                if cnt != 5:
-                    raise InstantiateCSVError('InstantiateCSVError: Файл поврежден')
-            except InstantiateCSVError as ex:
-                print(ex.message)
         except FileNotFoundError:
-            print('FileNotFoundError: Отсутствует файл item.csv')
+            raise FileNotFoundError('Отсутствует файл item.csv')
+        except KeyError:
+            raise InstantiateCSVError('Файл поврежден')
+
 
 
 
